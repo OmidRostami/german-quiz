@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modalverben – Quiz</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0f13;
+    --surface: #1a1a22;
+    --border: #2e2e3a;
+    --accent: #7c6af7;
+    --correct: #3ecf8e;
+    --wrong: #f26b6b;
+    --text: #e8e8f0;
+    --muted: #888899;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .verb {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 600;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, var(--accent), #b09af7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: all 0.3s;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+  }
+
+  .selector {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .pill {
+    padding: 0.45rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .pill:hover {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+
+  .pill.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  .section {
+    margin-bottom: 2.5rem;
+  }
+
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    padding-left: 0.25rem;
+  }
+
+  .rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    align-items: center;
+    gap: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    transition: border-color 0.2s;
+  }
+
+  .row:focus-within { border-color: var(--accent); }
+
+  .pronoun {
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    width: 100%;
+    caret-color: var(--accent);
+  }
+
+  input::placeholder { color: #3a3a4a; }
+  input.correct { color: var(--correct); }
+  input.wrong { color: var(--wrong); }
+  .row.correct { border-color: var(--correct); background: #0d2a1e; }
+  .row.wrong { border-color: var(--wrong); background: #2a0d0d; }
+
+  .actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  button {
+    flex: 1;
+    padding: 0.85rem;
+    border-radius: 10px;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+  }
+
+  button:active { transform: scale(0.98); }
+
+  .btn-check { background: var(--accent); color: white; }
+  .btn-reset { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
+  button:hover { opacity: 0.85; }
+
+  .score {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+    min-height: 1.5rem;
+  }
+
+  .score.perfect { color: var(--correct); }
+  .score.partial { color: #f7c948; }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2rem 0;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="verb" id="verbTitle">können</div>
+    <div class="subtitle">Modalverben · Quiz</div>
+  </div>
+
+  <div class="selector" id="selector"></div>
+
+  <div class="section">
+    <div class="section-label">Präsens</div>
+    <div class="rows" id="prasens"></div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section">
+    <div class="section-label">Konjunktiv II</div>
+    <div class="rows" id="konjunktiv"></div>
+  </div>
+
+  <div class="actions">
+    <button class="btn-check" onclick="checkAll()">Überprüfen</button>
+    <button class="btn-reset" onclick="resetAll()">Neu starten</button>
+  </div>
+
+  <div class="score" id="score"></div>
+
+</div>
+
+<script>
+  const pronouns = ['ich', 'du', 'er/sie/es', 'wir', 'ihr', 'sie/Sie'];
+
+  const verbs = {
+    können: {
+      prasens:    ['kann','kannst','kann','können','könnt','können'],
+      konjunktiv: ['könnte','könntest','könnte','könnten','könntet','könnten']
+    },
+    dürfen: {
+      prasens:    ['darf','darfst','darf','dürfen','dürft','dürfen'],
+      konjunktiv: ['dürfte','dürftest','dürfte','dürften','dürftet','dürften']
+    },
+    müssen: {
+      prasens:    ['muss','musst','muss','müssen','müsst','müssen'],
+      konjunktiv: ['müsste','müsstest','müsste','müssten','müsstet','müssten']
+    },
+    sollen: {
+      prasens:    ['soll','sollst','soll','sollen','sollt','sollen'],
+      konjunktiv: ['sollte','solltest','sollte','sollten','solltet','sollten']
+    },
+    wollen: {
+      prasens:    ['will','willst','will','wollen','wollt','wollen'],
+      konjunktiv: ['wollte','wolltest','wollte','wollten','wolltet','wollten']
+    },
+    mögen: {
+      prasens:    ['mag','magst','mag','mögen','mögt','mögen'],
+      konjunktiv: ['möchte','möchtest','möchte','möchten','möchtet','möchten']
+    }
+  };
+
+  let current = 'können';
+
+  function buildSelector() {
+    const sel = document.getElementById('selector');
+    Object.keys(verbs).forEach(v => {
+      const pill = document.createElement('button');
+      pill.className = 'pill' + (v === current ? ' active' : '');
+      pill.textContent = v;
+      pill.onclick = () => selectVerb(v);
+      sel.appendChild(pill);
+    });
+  }
+
+  function selectVerb(v) {
+    current = v;
+    document.querySelectorAll('.pill').forEach(p => {
+      p.classList.toggle('active', p.textContent === v);
+    });
+    document.getElementById('verbTitle').textContent = v;
+    buildRows();
+    document.getElementById('score').textContent = '';
+    document.getElementById('score').className = 'score';
+  }
+
+  function buildRows() {
+    const data = verbs[current];
+    ['prasens', 'konjunktiv'].forEach(tense => {
+      const container = document.getElementById(tense);
+      container.innerHTML = '';
+      const answers = data[tense];
+      pronouns.forEach((pron, i) => {
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.dataset.answer = answers[i];
+        row.innerHTML = `<span class="pronoun">${pron}</span><input type="text" placeholder="..." autocomplete="off" spellcheck="false">`;
+        container.appendChild(row);
+      });
+    });
+    bindEnterKeys();
+  }
+
+  function bindEnterKeys() {
+    const inputs = document.querySelectorAll('input');
+    inputs.forEach((input, i) => {
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && i < inputs.length - 1) inputs[i+1].focus();
+        if (e.key === 'Enter' && i === inputs.length - 1) checkAll();
+      });
+    });
+  }
+
+  function checkAll() {
+    const rows = document.querySelectorAll('.row');
+    let correct = 0;
+    rows.forEach(row => {
+      const input = row.querySelector('input');
+      const answer = row.dataset.answer;
+      const val = input.value.trim().toLowerCase();
+      row.classList.remove('correct', 'wrong');
+      input.classList.remove('correct', 'wrong');
+      if (val === answer) {
+        row.classList.add('correct');
+        input.classList.add('correct');
+        correct++;
+      } else {
+        row.classList.add('wrong');
+        input.classList.add('wrong');
+        input.value = answer;
+      }
+    });
+    const score = document.getElementById('score');
+    const total = rows.length;
+    score.textContent = correct === total
+      ? `Perfekt! ${correct}/${total} ✓`
+      : `${correct} von ${total} richtig`;
+    score.className = 'score ' + (correct === total ? 'perfect' : 'partial');
+  }
+
+  function resetAll() {
+    document.querySelectorAll('.row').forEach(row => {
+      const input = row.querySelector('input');
+      row.classList.remove('correct', 'wrong');
+      input.classList.remove('correct', 'wrong');
+      input.value = '';
+    });
+    document.getElementById('score').textContent = '';
+    document.getElementById('score').className = 'score';
+  }
+
+  buildSelector();
+  buildRows();
+</script>
+</body>
+</html>
