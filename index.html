@@ -6,200 +6,73 @@
 <title>Verben – Konjugation</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap');
-
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --bg: #0f0f13;
-    --surface: #1a1a22;
-    --border: #2e2e3a;
-    --accent: #7c6af7;
-    --text: #e8e8f0;
-    --muted: #888899;
-    --wrong: #f26b6b;
+    --bg: #0f0f13; --surface: #1a1a22; --border: #2e2e3a;
+    --accent: #7c6af7; --text: #e8e8f0; --muted: #888899; --wrong: #f26b6b;
   }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem 1rem;
-  }
-
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1rem; }
   .container { width: 100%; max-width: 600px; }
   .header { text-align: center; margin-bottom: 2rem; }
-
-  .verb {
-    font-family: 'Playfair Display', serif;
-    font-size: 3.5rem;
-    font-weight: 600;
-    letter-spacing: -1px;
-    background: linear-gradient(135deg, var(--accent), #b09af7);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .subtitle {
-    color: var(--muted);
-    font-size: 0.85rem;
-    font-weight: 300;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-top: 0.5rem;
-  }
-
-  .group-label {
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-align: center;
-    margin-bottom: 0.5rem;
-  }
-
+  .verb { font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 600; letter-spacing: -1px; background: linear-gradient(135deg, var(--accent), #b09af7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { color: var(--muted); font-size: 0.85rem; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; margin-top: 0.5rem; }
+  .group-label { font-size: 0.7rem; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); text-align: center; margin-bottom: 0.5rem; }
   .selector { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-bottom: 0.75rem; }
   .selector-group { margin-bottom: 1.5rem; }
-
-  .pill {
-    padding: 0.45rem 1rem;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--muted);
-    font-family: 'Inter', sans-serif;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
+  .pill { padding: 0.45rem 1rem; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); font-family: 'Inter', sans-serif; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
   .pill:hover { border-color: var(--accent); color: var(--text); }
   .pill.active { background: var(--accent); border-color: var(--accent); color: white; }
-
   .search-group { margin-bottom: 2rem; }
-
   .search-wrap { display: flex; gap: 0.5rem; align-items: center; }
-
-  .search-input {
-    flex: 1;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 0.7rem 1rem;
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    font-size: 0.95rem;
-    outline: none;
-    caret-color: var(--accent);
-    transition: border-color 0.2s;
-  }
-
+  .search-input { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.7rem 1rem; color: var(--text); font-family: 'Inter', sans-serif; font-size: 0.95rem; outline: none; caret-color: var(--accent); transition: border-color 0.2s; }
   .search-input:focus { border-color: var(--accent); }
   .search-input::placeholder { color: #3a3a4a; }
-
-  .search-btn {
-    padding: 0.7rem 1.2rem;
-    border-radius: 10px;
-    border: none;
-    background: var(--accent);
-    color: white;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: opacity 0.2s;
-    white-space: nowrap;
-  }
-
+  .search-btn { padding: 0.7rem 1.2rem; border-radius: 10px; border: none; background: var(--accent); color: white; font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: opacity 0.2s; white-space: nowrap; }
   .search-btn:hover { opacity: 0.85; }
   .search-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-  .search-status {
-    margin-top: 0.5rem;
-    font-size: 0.8rem;
-    color: var(--muted);
-    text-align: center;
-    min-height: 1.2rem;
-  }
-
+  .search-status { margin-top: 0.5rem; font-size: 0.8rem; color: var(--muted); text-align: center; min-height: 1.2rem; }
   .search-status.error { color: var(--wrong); }
-
   .section { margin-bottom: 2.5rem; }
-
-  .section-label {
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 1rem;
-    padding-left: 0.25rem;
-  }
-
+  .section-label { font-size: 0.75rem; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; padding-left: 0.25rem; }
   .rows { display: flex; flex-direction: column; gap: 0.6rem; }
-
-  .row {
-    display: grid;
-    grid-template-columns: 80px 1fr;
-    align-items: center;
-    gap: 1rem;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 0.75rem 1rem;
-  }
-
+  .row { display: grid; grid-template-columns: 80px 1fr; align-items: center; gap: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem 1rem; }
   .pronoun { color: var(--muted); font-size: 0.9rem; }
   .form { color: var(--text); font-size: 1rem; }
   .form.loading { color: #3a3a4a; font-style: italic; }
-
   .divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
 </style>
 </head>
 <body>
 <div class="container">
-
   <div class="header">
     <div class="verb" id="verbTitle">sein</div>
     <div class="subtitle">Konjugation</div>
   </div>
-
   <div class="selector-group">
     <div class="group-label">Hilfsverben</div>
     <div class="selector" id="selector-hilfs"></div>
   </div>
-
   <div class="selector-group">
     <div class="group-label">Modalverben</div>
     <div class="selector" id="selector-modal"></div>
   </div>
-
   <div class="search-group">
     <div class="group-label">Beliebiges Verb nachschlagen</div>
     <div class="search-wrap">
-      <input class="search-input" id="searchInput" type="text" placeholder="z.B. machen, gehen, laufen ..." autocomplete="off" spellcheck="false">
+      <input class="search-input" id="searchInput" type="text" placeholder="z.B. machen, gehen, essen ..." autocomplete="off" spellcheck="false">
       <button class="search-btn" id="searchBtn" onclick="searchVerb()">Suchen</button>
     </div>
     <div class="search-status" id="searchStatus"></div>
   </div>
-
   <div class="section">
     <div class="section-label">Präsens</div>
     <div class="rows" id="prasens"></div>
   </div>
-
   <hr class="divider">
-
   <div class="section">
     <div class="section-label">Konjunktiv II</div>
     <div class="rows" id="konjunktiv"></div>
   </div>
-
 </div>
 
 <script>
@@ -260,12 +133,43 @@
     });
   }
 
-  const API = 'https://german-verbs-api.onrender.com/german-verbs-api';
+  // Derive ihr Präsens from infinitive and er form
+  function deriveIhr(infinitive, erForm) {
+    const hasSep = erForm.includes(' ');
+    if (hasSep) {
+      // Separable verb: prefix stays → check if er stem matches inf stem
+      const parts = erForm.split(' ');
+      const erStem = parts[0].slice(0, -1); // remove -t from e.g. "kauft"
+      const prefix = parts[1];
+      const infStem = infinitive.replace(prefix, '').replace(/en$|n$/, '');
+      if (erStem.toLowerCase() === infStem.toLowerCase()) return erForm;
+      return infStem + 't ' + prefix;
+    }
+    const erStem = erForm.slice(0, -1); // remove trailing -t
+    const infStem = infinitive.replace(/en$|n$/, '');
+    if (erStem.toLowerCase() === infStem.toLowerCase()) return erForm;
+    // Vowel change detected — use infinitive stem
+    if (infStem.match(/[td]$/)) return infStem + 'et';
+    return infStem + 't';
+  }
 
-  async function fetchTense(verb, tense) {
-    const res = await fetch(`${API}?verb=${encodeURIComponent(verb)}&tense=${tense}`);
-    const data = await res.json();
-    return data.success ? data.data : null;
+  // Derive all 6 Konjunktiv II forms from ich form
+  function deriveKonjunktiv2(ichForm) {
+    if (!ichForm || ichForm === '—') return ['—','—','—','—','—','—'];
+    const base = ichForm; // always ends in -e
+    return [
+      base,               // ich
+      base + 'st',        // du
+      base,               // er/sie/es
+      base + 'n',         // wir
+      base + 't',         // ihr
+      base + 'n'          // sie/Sie
+    ];
+  }
+
+  function cleanCell(el) {
+    if (!el) return null;
+    return el.textContent.replace(/\[.*?\]/g, '').trim() || null;
   }
 
   async function searchVerb() {
@@ -284,25 +188,47 @@
     buildRows([], [], true);
 
     try {
-      const [prasens, konjunktiv] = await Promise.all([
-        fetchTense(verb, 'PRASENS'),
-        fetchTense(verb, 'KONJUNKTIV2_PRATERITUM')
-      ]);
+      // Fetch wikitext — compact template has ich/du/er + Konjunktiv II ich
+      const wurl = `https://de.wiktionary.org/w/api.php?action=parse&page=${encodeURIComponent(verb)}&prop=wikitext&format=json&origin=*`;
+      const wres = await fetch(wurl);
+      const wdata = await wres.json();
 
-      if (!prasens) {
+      if (wdata.error || !wdata.parse) {
         status.className = 'search-status error';
-        status.textContent = `„${verb}“ nicht gefunden.`;
+        status.textContent = `„${verb}" nicht gefunden.`;
         buildRows(['—','—','—','—','—','—'], ['—','—','—','—','—','—']);
         return;
       }
 
-      buildRows(prasens, konjunktiv || ['—','—','—','—','—','—']);
+      const wikitext = wdata.parse.wikitext['*'];
+
+      // Parse all template params
+      const params = {};
+      for (const m of wikitext.matchAll(/\|([^=|\n{]+)=([^|\n}]*)/g)) {
+        const val = m[2].trim().replace(/\[\[([^\]|]+)(?:\|[^\]]*)?\]\]/g, '$1').replace(/''([^']+)''/g, '$1').trim();
+        if (val) params[m[1].trim()] = val;
+      }
+
+      const g = (...keys) => { for (const k of keys) if (params[k]) return params[k]; return null; };
+
+      // Get what Wiktionary provides (ich/du/er for Präsens + ich for Konjunktiv II)
+      const pIch = g('Präsens_ich') || '—';
+      const pDu  = g('Präsens_du') || '—';
+      const pEr  = g('Präsens_er, sie, es', 'Präsens_er,sie,es', 'Präsens_er/sie/es') || '—';
+      const pWir = g('Präsens_wir') || verb;
+      const pSie = g('Präsens_sie', 'Präsens_sie, Sie') || verb;
+      const pIhr = g('Präsens_ihr') || deriveIhr(verb, pEr);
+
+      const k2Ich = g('Konjunktiv_II_ich') || null;
+      const konjunktiv = k2Ich ? deriveKonjunktiv2(k2Ich) : ['—','—','—','—','—','—'];
+
+      buildRows([pIch, pDu, pEr, pWir, pIhr, pSie], konjunktiv);
       status.className = 'search-status';
-      status.textContent = 'Quelle: german-verbs-api';
+      status.textContent = 'Quelle: de.wiktionary.org';
 
     } catch (e) {
       status.className = 'search-status error';
-      status.textContent = 'Fehler beim Laden. Bitte erneut versuchen.';
+      status.textContent = 'Fehler beim Laden.';
       buildRows(['—','—','—','—','—','—'], ['—','—','—','—','—','—']);
     } finally {
       btn.disabled = false;
