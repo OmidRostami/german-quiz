@@ -70,13 +70,13 @@
   </div>
   <hr class="divider">
   <div class="section">
-    <div class="section-label">Konjunktiv II</div>
-    <div class="rows" id="konjunktiv"></div>
+    <div class="section-label">Präteritum</div>
+    <div class="rows" id="prateritum"></div>
   </div>
   <hr class="divider">
   <div class="section">
-    <div class="section-label">Präteritum</div>
-    <div class="rows" id="prateritum"></div>
+    <div class="section-label">Konjunktiv II</div>
+    <div class="rows" id="konjunktiv"></div>
   </div>
 </div>
 
@@ -84,18 +84,18 @@
   const pronouns = ['ich', 'du', 'er/sie/es', 'wir', 'ihr', 'sie/Sie'];
 
   const hilfsVerben = {
-    sein:   { prasens: ['bin','bist','ist','sind','seid','sind'], konjunktiv: ['wäre','wärst','wäre','wären','wäret','wären'] },
-    haben:  { prasens: ['habe','hast','hat','haben','habt','haben'], konjunktiv: ['hätte','hättest','hätte','hätten','hättet','hätten'] },
-    werden: { prasens: ['werde','wirst','wird','werden','werdet','werden'], konjunktiv: ['würde','würdest','würde','würden','würdet','würden'] }
+    sein:   { prasens: ['bin','bist','ist','sind','seid','sind'], prateritum: ['war','warst','war','waren','wart','waren'], konjunktiv: ['wäre','wärst','wäre','wären','wäret','wären'] },
+    haben:  { prasens: ['habe','hast','hat','haben','habt','haben'], prateritum: ['hatte','hattest','hatte','hatten','hattet','hatten'], konjunktiv: ['hätte','hättest','hätte','hätten','hättet','hätten'] },
+    werden: { prasens: ['werde','wirst','wird','werden','werdet','werden'], prateritum: ['wurde','wurdest','wurde','wurden','wurdet','wurden'], konjunktiv: ['würde','würdest','würde','würden','würdet','würden'] }
   };
 
   const modalVerben = {
-    können: { prasens: ['kann','kannst','kann','können','könnt','können'], konjunktiv: ['könnte','könntest','könnte','könnten','könntet','könnten'] },
-    dürfen: { prasens: ['darf','darfst','darf','dürfen','dürft','dürfen'], konjunktiv: ['dürfte','dürftest','dürfte','dürften','dürftet','dürften'] },
-    müssen: { prasens: ['muss','musst','muss','müssen','müsst','müssen'], konjunktiv: ['müsste','müsstest','müsste','müssten','müsstet','müssten'] },
-    sollen: { prasens: ['soll','sollst','soll','sollen','sollt','sollen'], konjunktiv: ['sollte','solltest','sollte','sollten','solltet','sollten'] },
-    wollen: { prasens: ['will','willst','will','wollen','wollt','wollen'], konjunktiv: ['wollte','wolltest','wollte','wollten','wolltet','wollten'] },
-    mögen:  { prasens: ['mag','magst','mag','mögen','mögt','mögen'], konjunktiv: ['möchte','möchtest','möchte','möchten','möchtet','möchten'] }
+    können: { prasens: ['kann','kannst','kann','können','könnt','können'], prateritum: ['konnte','konntest','konnte','konnten','konntet','konnten'], konjunktiv: ['könnte','könntest','könnte','könnten','könntet','könnten'] },
+    dürfen: { prasens: ['darf','darfst','darf','dürfen','dürft','dürfen'], prateritum: ['durfte','durftest','durfte','durften','durftet','durften'], konjunktiv: ['dürfte','dürftest','dürfte','dürften','dürftet','dürften'] },
+    müssen: { prasens: ['muss','musst','muss','müssen','müsst','müssen'], prateritum: ['musste','musstest','musste','mussten','musstet','mussten'], konjunktiv: ['müsste','müsstest','müsste','müssten','müsstet','müssten'] },
+    sollen: { prasens: ['soll','sollst','soll','sollen','sollt','sollen'], prateritum: ['sollte','solltest','sollte','sollten','solltet','sollten'], konjunktiv: ['sollte','solltest','sollte','sollten','solltet','sollten'] },
+    wollen: { prasens: ['will','willst','will','wollen','wollt','wollen'], prateritum: ['wollte','wolltest','wollte','wollten','wolltet','wollten'], konjunktiv: ['wollte','wolltest','wollte','wollten','wolltet','wollten'] },
+    mögen:  { prasens: ['mag','magst','mag','mögen','mögt','mögen'], prateritum: ['mochte','mochtest','mochte','mochten','mochtet','mochten'], konjunktiv: ['möchte','möchtest','möchte','möchten','möchtet','möchten'] }
   };
 
   const allVerbs = { ...hilfsVerben, ...modalVerben };
@@ -120,7 +120,7 @@
     document.getElementById('searchStatus').textContent = '';
     document.getElementById('searchStatus').className = 'search-status';
     document.getElementById('searchInput').value = '';
-    buildRows(allVerbs[v].prasens, allVerbs[v].konjunktiv, false, null);
+    buildRows(allVerbs[v].prasens, allVerbs[v].konjunktiv, false, allVerbs[v].prateritum || null);
   }
 
   function buildRows(prasens, konjunktiv, loading = false, prateritum = null) {
@@ -306,7 +306,7 @@
 
   buildSelector('selector-hilfs', hilfsVerben);
   buildSelector('selector-modal', modalVerben);
-  buildRows(allVerbs[current].prasens, allVerbs[current].konjunktiv, false, null);
+  buildRows(allVerbs[current].prasens, allVerbs[current].konjunktiv, false, allVerbs[current].prateritum || null);
 </script>
 </body>
 </html>
