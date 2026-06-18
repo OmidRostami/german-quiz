@@ -260,8 +260,12 @@
     });
   }
 
-  function cleanText(el) {
-    return el ? el.textContent.replace(/\[.*?\]/g, '').trim() : '—';
+  const API = 'https://german-verbs-api.onrender.com/german-verbs-api';
+
+  async function fetchTense(verb, tense) {
+    const res = await fetch(`${API}?verb=${encodeURIComponent(verb)}&tense=${tense}`);
+    const data = await res.json();
+    return data.success ? data.data : null;
   }
 
   async function searchVerb() {
@@ -280,91 +284,25 @@
     buildRows([], [], true);
 
     try {
-      // Fetch full conjugation from Flexion: page
-      const url = `https://de.wiktionary.org/w/api.php?action=parse&page=Flexion:${encodeURIComponent(verb)}&prop=text&format=json&origin=*`;
-      const res = await fetch(url);
-      const data = await res.json();
+      const [prasens, konjunktiv] = await Promise.all([
+        fetchTense(verb, 'PRASENS'),
+        fetchTense(verb, 'KONJUNKTIV2_PRATERITUM')
+      ]);
 
-      if (data.error || !data.parse) {
+      if (!prasens) {
         status.className = 'search-status error';
-        status.textContent = `„${verb}" nicht gefunden.`;
+        status.textContent = `„${verb}“ nicht gefunden.`;
         buildRows(['—','—','—','—','—','—'], ['—','—','—','—','—','—']);
         return;
       }
 
-      const html = data.parse.text['*'];
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
-
-      // Find the conjugation table — look for table with Präsens header
-      const tables = doc.querySelectorAll('table.wikitable');
-      let prasens    = null;
-      let konjunktiv = null;
-
-      for (const table of tables) {
-        const headers = [...table.querySelectorAll('th')].map(th => th.textContent.trim());
-        const prasensIdx    = headers.findIndex(h => h === 'Präsens');
-        const konjunktivIdx = headers.findIndex(h => h === 'Konjunktiv II');
-
-        if (prasensIdx === -1) continue;
-
-        // Get data rows (skip header rows)
-        const rows = [...table.querySelectorAll('tr')].filter(tr => tr.querySelectorAll('td').length > 0);
-
-        if (rows.length >= 6) {
-          prasens    = rows.slice(0, 6).map(tr => {
-            const cells = tr.querySelectorAll('td');
-            return cleanText(cells[prasensIdx] || cells[1]);
-          });
-          konjunktiv = rows.slice(0, 6).map(tr => {
-            const cells = tr.querySelectorAll('td');
-            if (konjunktivIdx !== -1 && cells[konjunktivIdx]) return cleanText(cells[konjunktivIdx]);
-            return '—';
-          });
-          break;
-        }
-      }
-
-      // Fallback: try wikitext param parsing
-      if (!prasens) {
-        const wurl = `https://de.wiktionary.org/w/api.php?action=parse&page=${encodeURIComponent(verb)}&prop=wikitext&format=json&origin=*`;
-        const wres = await fetch(wurl);
-        const wdata = await wres.json();
-        const wikitext = wdata.parse?.wikitext?.['*'] || '';
-
-        const params = {};
-        for (const m of wikitext.matchAll(/\|([^=|\n{]+)=([^|\n}]*)/g)) {
-          const val = m[2].trim().replace(/\[\[([^\]|]+)(?:\|[^\]]*)?\]\]/g, '$1');
-          if (val) params[m[1].trim()] = val;
-        }
-
-        const g = (...keys) => { for (const k of keys) if (params[k]) return params[k]; return null; };
-
-        prasens = [
-          g('Präsens_ich') || '—',
-          g('Präsens_du') || '—',
-          g('Präsens_er, sie, es','Präsens_er,sie,es') || '—',
-          g('Präsens_wir') || verb,
-          g('Präsens_ihr') || '—',
-          g('Präsens_sie','Präsens_sie, Sie') || verb
-        ];
-        konjunktiv = [
-          g('Konjunktiv_II_ich') || '—',
-          g('Konjunktiv_II_du') || '—',
-          g('Konjunktiv_II_er, sie, es','Konjunktiv_II_er,sie,es') || '—',
-          g('Konjunktiv_II_wir') || '—',
-          g('Konjunktiv_II_ihr') || '—',
-          g('Konjunktiv_II_sie','Konjunktiv_II_sie, Sie') || '—'
-        ];
-      }
-
-      buildRows(prasens, konjunktiv);
+      buildRows(prasens, konjunktiv || ['—','—','—','—','—','—']);
       status.className = 'search-status';
-      status.textContent = 'Quelle: de.wiktionary.org';
+      status.textContent = 'Quelle: german-verbs-api';
 
     } catch (e) {
       status.className = 'search-status error';
-      status.textContent = 'Fehler beim Laden.';
+      status.textContent = 'Fehler beim Laden. Bitte erneut versuchen.';
       buildRows(['—','—','—','—','—','—'], ['—','—','—','—','—','—']);
     } finally {
       btn.disabled = false;
